@@ -60,8 +60,7 @@ app.post('/login', (req, res) => {
         if (response) {
           const tokenPayload = { username: result[0].username }
           const token = jwt.sign(tokenPayload, process.env.secret_key, { expiresIn: '6h' })
-
-          res.send({ response, token })
+          res.send({ username, token })
         }
         else if (error) {
           res.send({ message: "Wrong username/password combination" })
@@ -126,6 +125,175 @@ app.post('/deleteWord', (req, res) => {
   }
 })
 
+app.post('/add', (req, res) => {
+  const username = req.body.username
+  const word = req.body.word
+  const meaning = req.body.meaning
+  const example = req.body.example
+  db.query("INSERT INTO User_Words (username, word, meaning, example) VALUES (?,?,?,?)", [username, word, meaning, example], (err, result) => {
+    if (err) {
+      console.log(err)
+    }
+    if (result && result.length > 0) {
+      res.send(result)
+    }
+  })
+})
+
+app.get('/dictionary/vocabulary/1', (req, res) => {
+  db.query("SELECT * FROM Slang_Words_From_Social_Media_2023", (err, result) => {
+    if (err) {
+      res.send('Something went wrong')
+    }
+    else if (result && result.length > 0) {
+      res.send(result)
+    }
+  })
+})
+
+app.post('/dictionary/vocabulary/1/delete', (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = verifyToken(token)
+  const word = req.body.word
+  if (decodedToken) {
+    db.query("DELETE FROM Slang_Words_From_Social_Media_2023 WHERE word = ?", [word], (err, result) => {
+      if (err) {
+        res.send('Something went wrong')
+      }
+      else if (result) {
+        res.send('Word was successfully deleted')
+      }
+    })
+  }
+  else {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+})
+
+app.post('/dictionary/vocabulary/1/add', (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = verifyToken(token)
+  const username = decodedToken.username
+  const data = req.body.data
+  if (decodedToken) {
+    for (let i = 0; i < data.length; i++) {
+      db.query("INSERT INTO User_Words (username, word, meaning, example) VALUES (?,?,?,?)", [username, data[i].word, data[i].meaning, data[i].example], (err, result) => {
+        if (err) {
+          console.log(err)
+        }
+        if (result && result.length > 0) {
+          res.send(result)
+        }
+      })
+    }
+  }
+})
+
+app.get('/dictionary/vocabulary/2', (req, res) => {
+  db.query("SELECT * FROM Slang_Words_From_Video_Games_2023", (err, result) => {
+    if (err) {
+      res.send('Something went wrong')
+    }
+    else if (result && result.length > 0) {
+      res.send(result)
+    }
+  })
+})
+
+app.post('/dictionary/vocabulary/2/delete', (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = verifyToken(token)
+  const word = req.body.word
+  const data = req.body.data
+  if (decodedToken) {
+    db.query("DELETE FROM Slang_Words_From_Social_Media_2023 WHERE word = ?", [word], (err, result) => {
+      if (err) {
+        res.send('Something went wrong')
+      }
+      else if (result) {
+        res.send('Word was successfully deleted')
+      }
+    })
+  }
+  else {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+})
+
+app.post('/dictionary/vocabulary/2/add', (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = verifyToken(token)
+  const username = decodedToken.username
+  const data = req.body.data
+  console.log(data.word)
+  if (decodedToken) {
+    for (let i = 0; i < data.length; i++) {
+      db.query("INSERT INTO User_Words (username, word, meaning, example) VALUES (?,?,?,?)", [username, data[i].word, data[i].meaning, data[i].example], (err, result) => {
+        if (err) {
+          console.log(err)
+        }
+        if (result && result.length > 0) {
+          res.send(result)
+        }
+      })
+    }
+  }
+  else {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+})
+
+app.get('/dictionary/vocabulary/3', (req, res) => {
+  db.query("SELECT * FROM Slang_Words_From_WallStreet", (err, result) => {
+    if (err) {
+      res.send('Something went wrong')
+    }
+    else if (result && result.length > 0) {
+      res.send(result)
+    }
+  })
+})
+
+app.post('/dictionary/vocabulary/3/delete', (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = verifyToken(token)
+  const word = req.body.word
+  if (decodedToken) {
+    db.query("DELETE FROM Slang_Words_From_WallStreet WHERE word = ?", [word], (err, result) => {
+      if (err) {
+        res.send('Something went wrong')
+      }
+      else if (result) {
+        res.send('Word was successfully deleted')
+      }
+    })
+  }
+  else {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+})
+
+app.post('/dictionary/vocabulary/3/add', (req, res) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = verifyToken(token)
+  const username = decodedToken.username
+  const data = req.body.data
+  if (decodedToken) {
+    for (let i = 0; i < data.length; i++) {
+      db.query("INSERT INTO User_Words (username, word, meaning, example) VALUES (?,?,?,?)", [username, data[i].word, data[i].meaning, data[i].example], (err, result) => {
+        if (err) {
+          console.log(err)
+        }
+        if (result && result.length > 0) {
+          res.send(result)
+        }
+      })
+    }
+  }
+  else {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+})
 
 app.listen(8800, () => {
   console.log('Connected to the backend!')

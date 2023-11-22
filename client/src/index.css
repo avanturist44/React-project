@@ -11,3 +11,216 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.wrapper {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+.custom-white-box {
+  display: flex;
+  flex-direction: column;
+  width: 758px;
+  height: 516px;
+  background-color: #ffffff; 
+  border: 2px solid #e5e7eb; 
+  margin-top: 70px;
+}
+
+.text-container {
+  margin-top: 30px;
+  font-size: 26px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 16px; 
+}
+
+.instruction-text {
+  font-size: 12px; 
+  color: #4B5563; 
+  text-align: center;
+}
+
+.letters-and-shaded-boxes-container {
+  display: flex;
+  justify-content: center;
+}
+
+.shaded-buttons-container {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.letter-buttons-container {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+
+.letter-button, .shaded-letter-button {
+  width: 62px;
+  height: 50px; 
+  margin: 10px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.letter-button {
+  background-color: #ffffff;
+  border: 2px solid #e5e7eb;
+  color: #4B5563;
+}
+
+.shaded-letter-button {
+  background-color: #F5F7F8;
+  color: #F5F7F8;
+}
+
+.training-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 754px;
+  height: 86px;
+  background-color: #F5F7F8;
+
+}
+
+.bin {
+  width: 24px;
+  height: 24px;
+  margin-left: 28px;
+}
+
+.do-not-know {
+  margin-right: 28px;
+}
+
+.learn-words {
+  width: 160px;
+  height: 40px;
+  padding: 8px 16px;
+  margin-left: 28px;
+  color: 2582E7;
+  background-color: #2582E714;
+}
+
+.learning-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  margin-top: 300px;
+}
+
+.words-builder {
+  display: flex;
+  width: 236px;
+  height: 112px;
+  background-color: white;
+  border: 2px solid #e5e7eb;
+}
+
+.words-builder-text {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.words-builder-img {
+  width: 100px;
+  height: 100px;
+  justify-content: right;
+  margin-left: 10px;
+  margin-top: 45px;
+}
+
+.flashcards-container{
+  display: flex;
+  width: 236px;
+  height: 112px;
+  background-color: white;
+  border: 2px solid #e5e7eb;
+}
+
+.flashcards-text {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  margin-top: 10px
+}
+
+.flashcards-img {
+  width: 100px;
+  height: 100px;
+  justify-content: right;
+  margin-left: 35px;
+  margin-top: 50px;
+}
+
+.flashcard-container {
+  perspective: 1000px;
+  width: 758px;
+  height: 516px;
+}
+
+.flashcard {
+  margin-left: 450px;
+  margin-top: 175px;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  background-color: white;
+}
+
+.front, .back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e5e7eb;
+}
+
+.back {
+  transform: rotateY(180deg)
+}
+
+.flashcard.flipped {
+  transform: rotateY(180deg);
+}
+
+.arrows-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 40px;
+  margin-top: 10px;
+  gap: 100px;
+}
+
+.arrow-right, .arrow-left { 
+  width: 20px;
+  height: 20px;
+}
+
+.dropdownDefinition {
+  display: flex;
+}

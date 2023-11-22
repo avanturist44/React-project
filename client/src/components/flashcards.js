@@ -1,15 +1,13 @@
-import React from 'react'
-import { useState } from "react"
-import { useEffect } from 'react'
+import React, { useEffect, useState } from "react";
 
-export default function Learning() {
+function Flashcards() {
 
-  const [data, setData] = useState([])
   const [toggle, setToggle] = useState(false)
+  const [data, setData] = useState([])
+  const [flipped, setFlipped] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-  const toggleDropdown = () => {
-    setToggle(!toggle)
-  }
+  const [wordsAndMeanings, setWordsAndMeanings] = useState({ words: [], meanings: [] })
 
   async function ShowWords() {
     const token = localStorage.getItem('token')
@@ -31,11 +29,41 @@ export default function Learning() {
     }
   }
 
+  const goToNextWord = () => {
+    setCurrentIndex(prevIndex => {
+      const nextIndex = (prevIndex + 1) % data.length
+      return nextIndex;
+    })
+  }
+
+  const goToPreviousWord = () => {
+    setCurrentIndex(prevIndex => {
+      const nextIndex = (prevIndex - 1 + data.length) % data.length
+      return nextIndex
+    })
+  }
+
+  useEffect(() => {
+    if (data.length > 0) {
+      setWordsAndMeanings({
+        words: [data[currentIndex].word],
+        meanings: [data[currentIndex].meaning]
+      });
+    }
+  }, [data, currentIndex])
+
   useEffect(() => {
     ShowWords()
   }, [])
 
+  const toggleDropdown = () => {
+    setToggle(!toggle)
+  }
+
+
+
   return (
+
     <div>
       <nav className="border-b border-gray-300 py-4 px-4">
         <div className="container mx-auto flex items-center justify-between">
@@ -77,34 +105,47 @@ export default function Learning() {
         </div>
       </nav>
 
-      <div className="learning-container">
-        <div className="words-builder">
-          <div className="words-builder-text">
-            <a href='/training/hangman'>Words builder</a>
-            <p>{data.length} words</p>
+      <div className="flashcard-container" onClick={() => setFlipped(!flipped)}>
+        <div className={`flashcard ${flipped ? 'flipped' : ''}`}>
+          <div className="front">
+            <div className="word-text">
+              {wordsAndMeanings.words[0]}
+            </div>
           </div>
-          <div className="words-builder-img">
-            <a href='/training/hangman'>
-              <img src="./words.jpeg" width="100" height="50" alt='Play hangman game' />
-            </a>
+          <div className="back">
+            <div className="flashcard-back">
+              {wordsAndMeanings.meanings[0]}
+            </div>
           </div>
+
         </div>
-        <div className="flashcards-container">
+      </div>
+      <div className="arrows-container">
 
-          <div className="flashcards-text">
-            <a href='/training/flashcards'>Flashcards</a>
-            <p>{data.length} words</p>
+        <button onClick={goToPreviousWord}>
+          <div className="arrow-left">
+            <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
+            </svg>
           </div>
+        </button>
 
-          <div className="flashcards-img">
-            <a href='/training/flashcards'>
-              <img src="./flashcard.png" width="100" height="50" alt='Play hangman game' />
-            </a>
+        <p>{currentIndex}/{data.length}</p>
+
+
+        <button onClick={goToNextWord}>
+          <div className="arrow-right">
+            <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+            </svg>
           </div>
-        </div>
-
+        </button>
       </div>
 
     </div>
+
   )
 }
+
+
+export default Flashcards

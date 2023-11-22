@@ -26,7 +26,7 @@ function HomePage() {
               <section className="hero py-4 py-8 md:py-24">
                 <div className="container mx-auto items-center justify-between relative text-center">
                   <h1 className="text-4xl md:text-7xl leading-normal md:leading-relaxed text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 block text-center">Use
-                    <span className="font-bold"> New English</span>
+                    <span className="font-bold"> New English </span>
                     to learn slang words
                   </h1>
                   <p className="md:text-2xl text-gray-500 text-center max-w-3xl mx-auto mt-4">Learn the most popular and modern slang to keep up with current trends!</p>
@@ -134,7 +134,7 @@ function HomePage() {
                       <div className="mt-6">
                         <blockquote className="twitter-tweet"><p lang="en" dir="ltr">after 24 years old you should never be in a situationship again tbh you need to leave them immediately</p>&mdash; SALINA (@REDSEASHAWTY)
                           <a href="https://twitter.com/REDSEASHAWTY/status/1713334120666001452?ref_src=twsrc%5Etfw">October 14, 2023</a>
-                        </blockquote> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+                        </blockquote> <script async src="https://platform.twitter.com/widgets.js"></script>
                       </div>
                     </div>
                   </div>

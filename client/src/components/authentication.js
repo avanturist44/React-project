@@ -17,9 +17,21 @@ function Authentication() {
   // State variable for the login status
   const [loginStatus, setLoginStatus] = useState(false)
 
+  const userObject = {
+    username: username,
+    password: password,
+  }
+
+  class User {
+    constructor(username, password) {
+      this.username = username
+      this.password = password
+    }
+  }
+
   async function register() {
     try {
-      await fetch("http://localhost:8800/register", {
+      const response = await fetch("http://localhost:8800/register", {
         method: "POST",
         body: JSON.stringify({
           username: username,
@@ -29,9 +41,14 @@ function Authentication() {
           "Content-Type": "application/json",
           mode: "no-cors"
         }
-      }).then(data => {
-        setMessage(data)
-      })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      setMessage(data)
     }
     catch (error) {
       console.error(error)
@@ -40,7 +57,7 @@ function Authentication() {
 
   async function login() {
     try {
-      fetch("http://localhost:8800/login", {
+      const response = await fetch("http://localhost:8800/login", {
         method: "POST",
         body: JSON.stringify({
           username: usernameLogin,
@@ -51,11 +68,14 @@ function Authentication() {
           mode: "no-cors"
         }
       })
-        .then(response => response.json())
-        .then(data => {
-          localStorage.setItem('token', data.token)
-          console.log(localStorage)
-        })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('username', data.username)
       setLoginStatus(!loginStatus)
     }
     catch (error) {
@@ -63,18 +83,18 @@ function Authentication() {
     }
   }
 
-  const handleRegister = () => {
-    register()
+  const handleRegister = async () => {
     setLoading(true)
+    await register()
     setTimeout(() => {
       window.location.href = '/dashboard'
       setLoading(false)
     }, 3000)
   }
 
-  const handleLogin = () => {
-    login()
+  const handleLogin = async () => {
     setLoading(true)
+    await login()
     setTimeout(() => {
       window.location.href = '/dashboard'
       setLoading(false)
@@ -85,7 +105,6 @@ function Authentication() {
   return (
     <div>
 
-
       <div className="flex justify-center items-center h-screen">
         {!showLogin && (
           <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -94,27 +113,39 @@ function Authentication() {
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
                 Username
               </label>
-              <input onChange={(e) => { setUsername(e.target.value) }} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="username" placeholder="Username" />
+              <input onChange={(e) => { setUsername(e.target.value) }} className="shadow appearance-none border rounded w-full 
+                py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="username" type="username" placeholder="Username" />
+              {!username && <p className="text-red-500 text-xs italic">Please choose a username.</p>}
             </div>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                 Password
               </label>
-              <input onChange={(e) => { setPassword(e.target.value) }} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${password ? '' : 'border-red-500'}`} id="password" type="password" placeholder="******************" />
+              <input onChange={(e) => { setPassword(e.target.value) }} className={`shadow appearance-none border rounded 
+              w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${password ? '' : 'border-red-500'}`}
+                id="password" type="password" placeholder="******************" />
               {!password && <p className="text-red-500 text-xs italic">Please choose a password.</p>}
             </div>
             <div className="flex flex-col items-center justify-center space-y-4">
-              <button onClick={handleRegister} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+              <button onClick={handleRegister} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded 
+              focus:outline-none focus:shadow-outline" type="button">
                 Sign Up
               </button>
-              {/* <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="/">
-              Forgot Password?
-            </a> */}
+              <div>
+                {message}
+                {loading && (
+                  <div className="flex justify-center">
+                    <ReactLoading type={"bars"} color="purple" height={75} width={75} />
+                  </div>
+                )}
+              </div>
 
               <button onClick={() => { setShowLogin(!showLogin) }} className="bg-transparent border-none p-0 m-0 font-normal text-left hover:underline focus:outline-none" type="button">
                 I already have an account
               </button>
             </div>
+
           </form>
         )}
 
@@ -126,13 +157,14 @@ function Authentication() {
                 Username
               </label>
               <input onChange={(e) => { setUsernameLogin(e.target.value) }} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="username" placeholder="Username" />
+              {!usernameLogin && <p className="text-red-500 text-xs italic">Please choose a username.</p>}
             </div>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                 Password
               </label>
-              <input onChange={(e) => { setPasswordLogin(e.target.value) }} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${password ? '' : 'border-red-500'}`} id="password" type="password" placeholder="Password" />
-              {!password && <p className="text-red-500 text-xs italic">Please choose a password.</p>}
+              <input onChange={(e) => { setPasswordLogin(e.target.value) }} className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline ${passwordLogin ? '' : 'border-red-500'}`} id="password" type="password" placeholder="Password" />
+              {!passwordLogin && <p className="text-red-500 text-xs italic">Please choose a password.</p>}
             </div>
             <div className="flex flex-col items-center justify-center space-y-4">
               <button onClick={handleLogin} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
